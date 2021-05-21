@@ -1,28 +1,90 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app id="inspire">
+    <v-navigation-drawer v-model="drawer" app>
+      <v-list-item router to="/">
+        <v-list-item-content>
+          <v-list-item-title class="title">
+            <v-icon>mdi-rss</v-icon>
+            Feed App
+          </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-divider></v-divider>
+      <v-list dense nav v-if="!isLoggedIn">
+        <v-list-item link router to="/signup">
+          <v-list-item-content>
+            <v-list-item-title>Signup</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link router to="/login">
+          <v-list-item-content>
+            <v-list-item-title>Login</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+      <v-list v-else>
+        <v-list-item link router to="/feed">
+          <v-list-item-content>
+            <v-list-item-title>Feed</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+    <v-app-bar app color="primary" dark>
+      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title v-show="!drawer">
+        <v-icon>mdi-rss</v-icon>
+        Feed App
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <span class="mr-2" v-if="isLoggedIn">
+        <v-icon>mdi-account</v-icon>
+        {{ userName }}
+      </span>
+      <v-btn icon v-if="isLoggedIn" @click="logout">
+        <v-icon>mdi-export</v-icon>
+      </v-btn>
+    </v-app-bar>
+    <v-main>
+      <v-container>
+        <router-view></router-view>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  data: () => ({
+    drawer: null,
+  }),
+  created() {
+    this.$store.dispatch('tryLogin');
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters.isAuth;
+    },
+    userName() {
+      return this.$store.getters.name;
+    },
+    editDialog() {
+      return this.$store.getters.editDialog;
+    },
+  },
+  watch: {
+    isLoggedIn(curValue, oldValue) {
+      if (curValue && curValue !== oldValue) {
+        this.$router.replace('/feed');
+      } else if (!curValue && curValue !== oldValue) {
+        this.$router.replace('/login');
+      }
+    },
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('logout');
+    },
+  },
+};
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
