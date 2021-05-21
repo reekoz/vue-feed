@@ -27,7 +27,7 @@ export default {
     },
     actions: {
         async loadPosts(context) {
-            const res = await fetch('http://localhost:3000/feed/posts', {
+            const res = await fetch(process.env.VUE_APP_API_ENDPOINT + '/feed/posts', {
                 headers: {
                     Authentication: 'Bearer ' + context.getters.token
                 }
@@ -44,11 +44,11 @@ export default {
             });
         },
         async updatePost(context, payload) {
-            let url = 'http://localhost:3000/feed/post';
+            let url = process.env.VUE_APP_API_ENDPOINT + '/feed/post';
             let method = 'POST';
 
             if (payload.isEdit) {
-                url = 'http://localhost:3000/feed/post/' + payload._id;
+                url = process.env.VUE_APP_API_ENDPOINT + '/feed/post/' + payload._id;
                 method = 'PUT';
             }
 
@@ -93,7 +93,7 @@ export default {
             context.commit('toggleEditDialog');
         },
         async deletePost(context, payload) {
-            const res = await fetch('http://localhost:3000/feed/post/' + payload._id, {
+            const res = await fetch(process.env.VUE_APP_API_ENDPOINT + '/feed/post/' + payload._id, {
                 method: 'DELETE',
                 headers: {
                     Authentication: 'Bearer ' + context.getters.token,

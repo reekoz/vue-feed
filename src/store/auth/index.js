@@ -23,7 +23,7 @@ export default {
     },
     actions: {
         async login(context, payload) {
-            const res = await fetch('http://localhost:3000/auth/login', {
+            const res = await fetch(process.env.VUE_APP_API_ENDPOINT + '/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -107,7 +107,7 @@ export default {
 
         },
         async signup(context, payload) {
-            const res = await fetch('http://localhost:3000/auth/signup', {
+            const res = await fetch(process.env.VUE_APP_API_ENDPOINT + '/auth/signup', {
                 method: 'PUT',
                 headers: {
                     'Content-type': 'application/json'
