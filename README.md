@@ -1,4 +1,8 @@
-# vue-feed
+[![Netlify Status](https://api.netlify.com/api/v1/badges/1b767ad0-9bc4-4159-b09a-b3a03b8d74ce/deploy-status)](https://app.netlify.com/sites/vue-feed/deploys)
+
+# Vue2 Feed
+
+🚀 Demo https://vue-feed.netlify.app
 
 ## Project setup
 ```
