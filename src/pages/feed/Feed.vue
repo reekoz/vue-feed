@@ -29,6 +29,14 @@
     >
       <h1>No posts found 🤷🤷‍♂️</h1>
     </v-row>
+    <v-snackbar v-model="showErrorAlert" color="error" top right>
+      {{ errorMsg }}
+      <template v-slot:action="{ attrs }">
+        <v-btn color="white" text v-bind="attrs" @click="closeErorrAlert">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -44,6 +52,7 @@ export default {
       error: null,
       addDialog: false,
       openDialog: false,
+      showErrorAlert: false,
     };
   },
   created() {
@@ -65,6 +74,12 @@ export default {
     addPost() {
       this.$store.dispatch('openEditPost', { isEdit: false, post: null });
     },
+    closeErorrAlert() {
+      this.$store.dispatch('toggleErrorAlert', {
+        show: false,
+        message: null,
+      });
+    },
   },
   computed: {
     posts() {
@@ -75,6 +90,17 @@ export default {
     },
     editPost() {
       return this.$store.getters.editPost;
+    },
+    errorAlert() {
+      return this.$store.getters.errorAlert;
+    },
+    errorMsg() {
+      return this.$store.getters.errorMsg;
+    },
+  },
+  watch: {
+    errorAlert(value) {
+      this.showErrorAlert = value;
     },
   },
 };

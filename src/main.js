@@ -7,8 +7,6 @@ import store from './store/index'
 
 Vue.config.productionTip = false
 
-console.log(process.env);
-
 new Vue({
   vuetify,
   router,

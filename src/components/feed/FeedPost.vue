@@ -59,6 +59,11 @@ export default {
         this.dialogDelete = false;
       } catch (err) {
         this.dialogDelete = false;
+        this.deleteError = err.message || err;
+        this.$store.dispatch('toggleErrorAlert', {
+          show: true,
+          message: err.message || err,
+        });
       }
     },
     editPost() {
@@ -72,5 +77,4 @@ export default {
 .post {
   margin: 0.5rem 0.5rem;
 }
-
 </style>

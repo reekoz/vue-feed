@@ -5,7 +5,9 @@ export default {
             status: '',
             editDialog: false,
             isEdit: false,
-            editPost: null
+            editPost: null,
+            errorAlert: false,
+            errorMsg: null
         }
     },
     getters: {
@@ -23,6 +25,12 @@ export default {
         },
         editPost(state) {
             return state.editPost;
+        },
+        errorAlert(state) {
+            return state.errorAlert;
+        },
+        errorMsg(state) {
+            return state.errorMsg;
         }
     },
     actions: {
@@ -92,6 +100,9 @@ export default {
         toggleEditDialog(context) {
             context.commit('toggleEditDialog');
         },
+        toggleErrorAlert(context, payload) {
+            context.commit('toggleErrorAlert', payload);
+        },
         async deletePost(context, payload) {
             const res = await fetch(process.env.VUE_APP_API_ENDPOINT + '/feed/post/' + payload._id, {
                 method: 'DELETE',
@@ -119,6 +130,11 @@ export default {
         },
         setEditPost(state, payload) {
             state.editPost = payload.post;
+        },
+        toggleErrorAlert(state, payload) {
+            state.errorAlert = payload.show;
+            if (state.errorAlert)
+                state.errorMsg = payload.message;
         }
     }
 }
