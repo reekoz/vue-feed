@@ -69,6 +69,9 @@ export default {
     post() {
       return this.$store.getters.editPost;
     },
+    editDialog() {
+      return this.$store.getters.editPost;
+    }
   },
   created() {
     this.setCurrentPost(this.post);
@@ -105,6 +108,10 @@ export default {
     post(newPost) {
       this.setCurrentPost(newPost);
     },
+    editDialog(state) {
+      if (state)
+        this.error = null;
+    }
   },
 };
 </script>

@@ -3,7 +3,7 @@
     <v-img :src="post.imageUrl" height="267"></v-img>
     <v-card-title>{{ post.title }}</v-card-title>
     <v-card-subtitle>
-      Created by {{ post.creator.name }} at {{ post.creationDate }}
+      Created by {{ post.creator.name }} at {{ creationDate }}
     </v-card-subtitle>
     <v-card-text>{{ post.content }}</v-card-text>
     <v-card-actions>
@@ -48,7 +48,7 @@ export default {
   },
   computed: {
     creationDate() {
-      return new Date(this.createdAt).toLocaleDateString('en-US');
+      return new Date(this.post.createdAt).toLocaleDateString('en-US');
     },
   },
   methods: {
