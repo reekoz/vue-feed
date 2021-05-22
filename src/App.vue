@@ -49,6 +49,14 @@
       <v-container>
         <router-view></router-view>
       </v-container>
+      <v-snackbar v-model="showAlert" :color="alertType" top right>
+        {{ alertMsg }}
+        <template v-slot:action="{ attrs }">
+          <v-btn color="white" text v-bind="attrs" @click="closeErorrAlert">
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-main>
   </v-app>
 </template>
@@ -57,6 +65,7 @@
 export default {
   data: () => ({
     drawer: null,
+    showAlert: false,
   }),
   created() {
     this.$store.dispatch('tryLogin');
@@ -71,6 +80,15 @@ export default {
     editDialog() {
       return this.$store.getters.editDialog;
     },
+    alert() {
+      return this.$store.getters.alert;
+    },
+    alertMsg() {
+      return this.$store.getters.alertMsg;
+    },
+    alertType() {
+      return this.$store.getters.alertType;
+    },
   },
   watch: {
     isLoggedIn(curValue, oldValue) {
@@ -80,10 +98,20 @@ export default {
         this.$router.replace('/login');
       }
     },
+    alert(value) {
+      this.showAlert = value;
+    },
   },
   methods: {
     logout() {
       this.$store.dispatch('logout');
+    },
+    closeErorrAlert() {
+      this.$store.dispatch('toggleAlert', {
+        show: false,
+        message: null,
+        type: null,
+      });
     },
   },
 };

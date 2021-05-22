@@ -13,11 +13,14 @@
       ></v-skeleton-loader>
     </v-row>
     <v-row justify="center">
-      <v-col lg="1" md="3" sm="4" xs="12">
+      <v-col lg="2" md="3" sm="4" xs="12">
         <v-btn color="primary" block @click.stop="addPost">
           New Post
         </v-btn>
       </v-col>
+    </v-row>
+    <v-row justify="center">
+      <v-pagination v-model="page" :length="pageLenght"></v-pagination>
     </v-row>
     <v-row v-if="!loading && posts && posts.length > 0" class="post-list">
       <feed-post v-for="p in posts" :key="p._id" :post="p"></feed-post>
@@ -29,14 +32,9 @@
     >
       <h1>No posts found 🤷🤷‍♂️</h1>
     </v-row>
-    <v-snackbar v-model="showErrorAlert" color="error" top right>
-      {{ errorMsg }}
-      <template v-slot:action="{ attrs }">
-        <v-btn color="white" text v-bind="attrs" @click="closeErorrAlert">
-          Close
-        </v-btn>
-      </template>
-    </v-snackbar>
+    <v-row justify="center">
+      <v-pagination v-model="page" :length="pageLenght"></v-pagination>
+    </v-row>
   </v-container>
 </template>
 
@@ -45,14 +43,15 @@ import FeedPost from '../../components/feed/FeedPost.vue';
 import EditPost from '../../components/feed/EditPost.vue';
 
 export default {
-  components: { FeedPost, EditPost },
+  components: { EditPost, FeedPost },
   data() {
     return {
       loading: false,
       error: null,
       addDialog: false,
       openDialog: false,
-      showErrorAlert: false,
+      page: 1,
+      postsPerPage: 6,
     };
   },
   created() {
@@ -64,7 +63,10 @@ export default {
       this.error = null;
 
       try {
-        await this.$store.dispatch('loadPosts');
+        await this.$store.dispatch('loadPosts', {
+          page: this.page,
+          perPage: this.postsPerPage,
+        });
       } catch (err) {
         this.error = err.message || err;
       }
@@ -74,11 +76,13 @@ export default {
     addPost() {
       this.$store.dispatch('openEditPost', { isEdit: false, post: null });
     },
-    closeErorrAlert() {
-      this.$store.dispatch('toggleErrorAlert', {
-        show: false,
-        message: null,
-      });
+    nextPage() {
+      this.page++;
+      this.loadPosts();
+    },
+    prevPage() {
+      this.page--;
+      this.loadPosts();
     },
   },
   computed: {
@@ -91,16 +95,14 @@ export default {
     editPost() {
       return this.$store.getters.editPost;
     },
-    errorAlert() {
-      return this.$store.getters.errorAlert;
-    },
-    errorMsg() {
-      return this.$store.getters.errorMsg;
+    pageLenght() {
+      const total = this.$store.getters.totalPosts;
+      return Math.ceil(total / this.postsPerPage);
     },
   },
   watch: {
-    errorAlert(value) {
-      this.showErrorAlert = value;
+    page() {
+      this.loadPosts();
     },
   },
 };

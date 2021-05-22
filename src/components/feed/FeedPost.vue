@@ -63,9 +63,10 @@ export default {
       } catch (err) {
         this.dialogDelete = false;
         this.deleteError = err.message || err;
-        this.$store.dispatch('toggleErrorAlert', {
+        this.$store.dispatch('toggleAlert', {
           show: true,
           message: err.message || err,
+          type: 'error'
         });
       }
     },
