@@ -1,6 +1,6 @@
 <template>
   <v-card class="mx-auto ml-1 mr-1 post" max-width="400">
-    <v-img :src="post.imageUrl" height="267"></v-img>
+    <v-img :src="getImage" height="267"></v-img>
     <v-card-title>{{ post.title }}</v-card-title>
     <v-card-subtitle>
       Created by {{ post.creator.name }} at {{ creationDate }}
@@ -49,6 +49,9 @@ export default {
   computed: {
     creationDate() {
       return new Date(this.post.createdAt).toLocaleDateString('en-US');
+    },
+    getImage() {
+      return this.post.imageUrl || '/img/no_image.png';
     },
   },
   methods: {
