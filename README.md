@@ -4,6 +4,14 @@
 
 🚀 Demo https://vue-feed.netlify.app
 
+<h2>Features</h2>
+<ul>
+  <li>Vuetify for UI Material <a href="https://vuetifyjs.com/en/getting-started/installation/">Vuetify</a>)</li>
+  <li>Vuex to manage state (<a href="https://vuex.vuejs.org/">Vuex</a>)</li> 
+  <li>PWA with Service Worker (<a href="https://ionicframework.com/docs/vue/pwa">Guide</a>)</li>
+  <li>Authentication with JWT (<a href="https://jwt.io/">JWT</a>)</li>
+</ul>
+
 ## Project setup
 ```
 npm install
