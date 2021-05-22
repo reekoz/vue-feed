@@ -6,6 +6,7 @@ export default {
     token: null,
     userId: null,
     name: null,
+    themeMode: 'dark',
   },
   getters: {
     isAuth(state) {
@@ -19,6 +20,9 @@ export default {
     },
     name(state) {
       return state.name;
+    },
+    themeMode(state) {
+      return state.themeMode;
     },
   },
   actions: {
@@ -46,6 +50,7 @@ export default {
       localStorage.setItem('token', resData.token);
       localStorage.setItem('userId', resData.userId);
       localStorage.setItem('name', resData.name);
+      localStorage.setItem('themeMode', resData.themeMode);
 
       const remainingMilliseconds = 60 * 60 * 1000;
       const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
@@ -60,6 +65,7 @@ export default {
         token: resData.token,
         userId: resData.userId,
         name: resData.name,
+        themeMode: resData.themeMode,
       });
     },
     setAutoLogout(context, payload) {
@@ -78,6 +84,7 @@ export default {
       localStorage.removeItem('userId');
       localStorage.removeItem('name');
       localStorage.removeItem('expiryDate');
+      localStorage.removeItem('themeMode');
 
       clearTimeout(timer);
 
@@ -107,8 +114,11 @@ export default {
 
       const userId = localStorage.getItem('userId');
       const name = localStorage.getItem('name');
+      const themeMode = localStorage.getItem('themeMode');
+
       const remainingMilliseconds =
         new Date(expiryDate).getTime() - new Date().getTime();
+
       context.dispatch('setAutoLogout', {
         ms: remainingMilliseconds,
       });
@@ -118,6 +128,7 @@ export default {
         token: token,
         userId: userId,
         name: name,
+        themeMode: themeMode,
       });
     },
     async signup(context, payload) {
@@ -147,12 +158,44 @@ export default {
 
       context.dispatch('logout');
     },
+    async updateSettings(context, payload) {
+      const res = await fetch(
+        'http://localhost:3000/auth/settings/' + context.getters.userId,
+        {
+          method: 'PUT',
+          headers: {
+            Authentication: 'Bearer ' + context.getters.token,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: payload.name,
+            themeMode: payload.themeMode,
+          }),
+        }
+      );
+
+      const resData = await res.json();
+
+      if (!res.ok) {
+        throw new Error(resData.message || 'Update settings failed');
+      }
+
+      localStorage.setItem('name', payload.name);
+      localStorage.setItem('themeMode', payload.themeMode);
+
+      context.commit('setSettings', payload);
+    },
   },
   mutations: {
     setAuth(state, payload) {
       state.isAuth = payload.isAuth;
       state.token = payload.token;
       state.userId = payload.userId;
+      state.name = payload.name;
+      state.themeMode = payload.themeMode;
+    },
+    setSettings(state, payload) {
+      state.themeMode = payload.themeMode;
       state.name = payload.name;
     },
   },

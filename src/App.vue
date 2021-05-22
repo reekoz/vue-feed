@@ -108,6 +108,9 @@ export default {
     alertType() {
       return this.$store.getters.alertType;
     },
+    themeMode() {
+      return this.$store.getters.themeMode;
+    },
   },
   watch: {
     isLoggedIn(curValue, oldValue) {
@@ -119,6 +122,9 @@ export default {
     },
     alert(value) {
       this.showAlert = value;
+    },
+    themeMode(value) {
+      this.$vuetify.theme.dark = value === 'dark';
     },
   },
   methods: {
