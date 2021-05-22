@@ -30,20 +30,35 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar app color="primary" dark>
+    <v-app-bar app color="primary" dark hide-on-scroll>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title v-show="!drawer">
         <v-icon>mdi-rss</v-icon>
         Feed App
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <span class="mr-2" v-if="isLoggedIn">
-        <v-icon>mdi-account</v-icon>
-        {{ userName }}
-      </span>
+      <v-menu bottom v-if="isLoggedIn" open-on-hover offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <span v-bind="attrs" v-on="on" class="mr-2">
+            <v-icon>mdi-account</v-icon>
+            {{ userName }}
+          </span>
+        </template>
+        <v-list>
+          <v-list-item @click.stop="settingsDialog = true">
+            <v-list-item-title>
+              <v-icon>mdi-cog</v-icon>
+              Settings
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
       <v-btn icon v-if="isLoggedIn" @click="logout">
         <v-icon>mdi-export</v-icon>
       </v-btn>
+      <v-dialog v-model="settingsDialog" persistent max-width="400">
+        <edit-settings @close-dialog="settingsDialog = false"></edit-settings>
+      </v-dialog>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -62,10 +77,14 @@
 </template>
 
 <script>
+import EditSettings from './components/auth/EditSettings.vue';
+
 export default {
+  components: { EditSettings },
   data: () => ({
     drawer: null,
     showAlert: false,
+    settingsDialog: false,
   }),
   created() {
     this.$store.dispatch('tryLogin');
