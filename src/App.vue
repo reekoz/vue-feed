@@ -140,9 +140,6 @@ export default {
       });
     },
     setThemeMode(value) {
-      if (!value) {
-        value = localStorage.getItem('themeMode') || 'dark';
-      }
       this.$vuetify.theme.dark = value === 'dark';
     },
   },

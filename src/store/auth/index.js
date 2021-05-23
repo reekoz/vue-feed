@@ -96,6 +96,7 @@ export default {
         token: null,
         userId: null,
         name: null,
+        themeMode: localStorage.getItem('themeMode'),
       });
     },
     tryLogin(context) {
