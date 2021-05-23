@@ -6,7 +6,7 @@
 
 <h2>Features</h2>
 <ul>
-  <li>Vuetify for UI Material with dynamic user's favorite theme stored (dark/light and primary color) <a href="https://vuetifyjs.com/en/getting-started/installation/">Vuetify</a>)</li>
+  <li>Vuetify for UI Material with dynamic user's favorite theme stored (dark/light and primary color) (<a href="https://vuetifyjs.com/en/getting-started/installation/">Vuetify</a>)</li>
   <li>Vuex to manage state (<a href="https://vuex.vuejs.org/">Vuex</a>)</li> 
   <li>PWA with Service Worker (<a href="https://ionicframework.com/docs/vue/pwa">Guide</a>)</li>
   <li>Authentication with JWT, with auto logout after token expiration (<a href="https://jwt.io/">JWT</a>)</li>
