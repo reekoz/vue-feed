@@ -78,6 +78,7 @@
 
 <script>
 import EditSettings from './components/auth/EditSettings.vue';
+import colors from 'vuetify/lib/util/colors';
 
 export default {
   components: { EditSettings },
@@ -88,6 +89,7 @@ export default {
   }),
   created() {
     this.setThemeMode(this.themeMode);
+    this.setThemeColor(this.color, this.shade);
     this.$store.dispatch('tryLogin');
   },
   computed: {
@@ -112,6 +114,12 @@ export default {
     themeMode() {
       return this.$store.getters.themeMode;
     },
+    color() {
+      return this.$store.getters.color;
+    },
+    shade() {
+      return this.$store.getters.shade;
+    },
   },
   watch: {
     isLoggedIn(curValue, oldValue) {
@@ -127,6 +135,12 @@ export default {
     themeMode(value) {
       this.setThemeMode(value);
     },
+    color(value) {
+      this.setThemeColor(value, this.shade);
+    },
+    shade(value) {
+      this.setThemeColor(this.color, value);
+    },
   },
   methods: {
     logout() {
@@ -141,6 +155,17 @@ export default {
     },
     setThemeMode(value) {
       this.$vuetify.theme.dark = value === 'dark';
+    },
+    setThemeColor(color, shade) {
+      if (this.$vuetify.theme.dark) {
+        this.$vuetify.theme.themes.dark.primary = shade
+          ? colors[color][shade]
+          : colors[color];
+      } else {
+        this.$vuetify.theme.themes.light.primary = shade
+          ? colors[color][shade]
+          : colors[color];
+      }
     },
   },
 };

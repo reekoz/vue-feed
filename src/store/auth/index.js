@@ -8,6 +8,8 @@ export default {
     name: null,
     themeMode: localStorage.getItem('themeMode') || 'dark',
     status: null,
+    color: localStorage.getItem('color') || 'teal',
+    shade: localStorage.getItem('shade'),
   },
   getters: {
     isAuth(state) {
@@ -27,6 +29,12 @@ export default {
     },
     status(state) {
       return state.status;
+    },
+    color(state) {
+      return state.color;
+    },
+    shade(state) {
+      return state.shade;
     },
   },
   actions: {
@@ -55,6 +63,10 @@ export default {
       localStorage.setItem('userId', resData.userId);
       localStorage.setItem('name', resData.name);
       localStorage.setItem('themeMode', resData.themeMode);
+      localStorage.setItem('color', resData.color);
+
+      if (resData.shade)
+        localStorage.setItem('shade', resData.shade);
 
       const remainingMilliseconds = 60 * 60 * 1000;
       const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
@@ -70,6 +82,8 @@ export default {
         userId: resData.userId,
         name: resData.name,
         themeMode: resData.themeMode,
+        color: resData.color,
+        shade: resData.shade,
       });
     },
     setAutoLogout(context, payload) {
@@ -97,6 +111,8 @@ export default {
         userId: null,
         name: null,
         themeMode: localStorage.getItem('themeMode'),
+        color: localStorage.getItem('color'),
+        shade: localStorage.getItem('shade'),
       });
     },
     tryLogin(context) {
@@ -119,6 +135,8 @@ export default {
       const userId = localStorage.getItem('userId');
       const name = localStorage.getItem('name');
       const themeMode = localStorage.getItem('themeMode');
+      const color = localStorage.getItem('color');
+      const shade = localStorage.getItem('shade');
 
       const remainingMilliseconds =
         new Date(expiryDate).getTime() - new Date().getTime();
@@ -133,6 +151,8 @@ export default {
         userId: userId,
         name: name,
         themeMode: themeMode,
+        color: color,
+        shade: shade,
       });
     },
     async signup(context, payload) {
@@ -176,6 +196,8 @@ export default {
           body: JSON.stringify({
             name: payload.name,
             themeMode: payload.themeMode,
+            color: payload.color,
+            shade: payload.shade,
           }),
         }
       );
@@ -188,6 +210,10 @@ export default {
 
       localStorage.setItem('name', payload.name);
       localStorage.setItem('themeMode', payload.themeMode);
+      localStorage.setItem('color', payload.color);
+
+      if (payload.shade)
+        localStorage.setItem('shade', payload.shade);
 
       context.commit('setSettings', payload);
     },
@@ -244,10 +270,14 @@ export default {
       state.userId = payload.userId;
       state.name = payload.name;
       state.themeMode = payload.themeMode;
+      state.color = payload.color;
+      state.shade = payload.shade;
     },
     setSettings(state, payload) {
       state.themeMode = payload.themeMode;
       state.name = payload.name;
+      state.color = payload.color;
+      state.shade = payload.shade;
     },
     setStatus(state, payload) {
       state.status = payload.status;
