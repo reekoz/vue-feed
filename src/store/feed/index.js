@@ -2,7 +2,6 @@ export default {
   state() {
     return {
       posts: [],
-      status: '',
       editDialog: false,
       isEdit: false,
       editPost: null,
@@ -12,9 +11,6 @@ export default {
   getters: {
     posts(state) {
       return state.posts;
-    },
-    status(state) {
-      return state.status;
     },
     editDialog(state) {
       return state.editDialog;

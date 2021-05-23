@@ -46,6 +46,9 @@ export default {
       valid: false,
     };
   },
+  created() {
+    this.getStatus;
+  },
   computed: {
     creationDate() {
       return new Date(this.post.createdAt).toLocaleDateString('en-US');
@@ -66,7 +69,7 @@ export default {
         this.$store.dispatch('toggleAlert', {
           show: true,
           message: err.message || err,
-          type: 'error'
+          type: 'error',
         });
       }
     },

@@ -87,6 +87,7 @@ export default {
     settingsDialog: false,
   }),
   created() {
+    this.setThemeMode(this.themeMode);
     this.$store.dispatch('tryLogin');
   },
   computed: {
@@ -124,7 +125,7 @@ export default {
       this.showAlert = value;
     },
     themeMode(value) {
-      this.$vuetify.theme.dark = value === 'dark';
+      this.setThemeMode(value);
     },
   },
   methods: {
@@ -137,6 +138,9 @@ export default {
         message: null,
         type: null,
       });
+    },
+    setThemeMode(value) {
+      this.$vuetify.theme.dark = value === 'dark';
     },
   },
 };

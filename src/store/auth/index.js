@@ -6,7 +6,8 @@ export default {
     token: null,
     userId: null,
     name: null,
-    themeMode: 'dark',
+    themeMode: localStorage.getItem('themeMode') || 'dark',
+    status: null,
   },
   getters: {
     isAuth(state) {
@@ -23,6 +24,9 @@ export default {
     },
     themeMode(state) {
       return state.themeMode;
+    },
+    status(state) {
+      return state.status;
     },
   },
   actions: {
@@ -84,7 +88,6 @@ export default {
       localStorage.removeItem('userId');
       localStorage.removeItem('name');
       localStorage.removeItem('expiryDate');
-      localStorage.removeItem('themeMode');
 
       clearTimeout(timer);
 
@@ -160,7 +163,9 @@ export default {
     },
     async updateSettings(context, payload) {
       const res = await fetch(
-        'http://localhost:3000/auth/settings/' + context.getters.userId,
+        process.env.VUE_APP_API_ENDPOINT +
+          '/auth/settings/' +
+          context.getters.userId,
         {
           method: 'PUT',
           headers: {
@@ -185,6 +190,51 @@ export default {
 
       context.commit('setSettings', payload);
     },
+    async getStatus(context) {
+      const res = await fetch(
+        process.env.VUE_APP_API_ENDPOINT +
+          '/auth/status/' +
+          context.getters.userId,
+        {
+          headers: {
+            Authentication: 'Bearer ' + context.getters.token,
+          },
+        }
+      );
+
+      const resData = await res.json();
+
+      if (!res.ok) {
+        throw new Error(resData.message || 'Failed to fetch status');
+      }
+
+      context.commit('setStatus', resData);
+    },
+    async updateStatus(context, payload) {
+      const res = await fetch(
+        process.env.VUE_APP_API_ENDPOINT +
+          '/auth/status/' +
+          context.getters.userId,
+        {
+          method: 'PUT',
+          headers: {
+            Authentication: 'Bearer ' + context.getters.token,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            status: payload.status,
+          }),
+        }
+      );
+
+      const resData = await res.json();
+
+      if (!res.ok) {
+        throw new Error(resData.message || 'Update status failed');
+      }
+
+      context.commit('setStatus', payload);
+    },
   },
   mutations: {
     setAuth(state, payload) {
@@ -197,6 +247,9 @@ export default {
     setSettings(state, payload) {
       state.themeMode = payload.themeMode;
       state.name = payload.name;
+    },
+    setStatus(state, payload) {
+      state.status = payload.status;
     },
   },
 };

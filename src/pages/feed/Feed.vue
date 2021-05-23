@@ -4,6 +4,18 @@
       <edit-post></edit-post>
     </v-dialog>
     <v-row justify="center">
+      <v-text-field
+        label="Yout Status"
+        v-model="status"
+        placeholder="Something..."
+        clearable
+        class="mr-2 shrink"
+      ></v-text-field>
+      <v-btn color="primary" @click="updateStatus" outlined large>
+        Update
+      </v-btn>
+    </v-row>
+    <v-row justify="center">
       <v-col lg="2" md="3" sm="4" xs="12">
         <v-btn color="primary" block @click.stop="addPost">
           New Post
@@ -52,10 +64,12 @@ export default {
       openDialog: false,
       page: 1,
       postsPerPage: 6,
+      status: null,
     };
   },
   created() {
     this.loadPosts();
+    this.getStatus();
   },
   methods: {
     async loadPosts() {
@@ -83,6 +97,34 @@ export default {
     prevPage() {
       this.page--;
       this.loadPosts();
+    },
+    async getStatus() {
+      try {
+        await this.$store.dispatch('getStatus');
+        this.status = this.$store.getters.status;
+      } catch (err) {
+        this.$store.dispatch('toggleAlert', {
+          show: true,
+          message: err.message || err,
+          type: 'error',
+        });
+      }
+    },
+    async updateStatus() {
+      try {
+        await this.$store.dispatch('updateStatus', { status: this.status });
+        this.$store.dispatch('toggleAlert', {
+          show: true,
+          message: 'Status updated!',
+          type: 'success',
+        });
+      } catch (err) {
+        this.$store.dispatch('toggleAlert', {
+          show: true,
+          message: err.message || err,
+          type: 'error',
+        });
+      }
     },
   },
   computed: {
