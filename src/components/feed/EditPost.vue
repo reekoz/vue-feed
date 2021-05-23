@@ -23,7 +23,13 @@
             ></v-textarea>
           </v-row>
           <v-row>
-            <v-alert type="error" v-show="error" dense text class="mx-auto mt-1">
+            <v-alert
+              type="error"
+              v-show="error"
+              dense
+              text
+              class="mx-auto mt-1"
+            >
               {{ error }}
             </v-alert>
           </v-row>
@@ -71,7 +77,7 @@ export default {
     },
     editDialog() {
       return this.$store.getters.editPost;
-    }
+    },
   },
   created() {
     this.setCurrentPost(this.post);
@@ -83,6 +89,7 @@ export default {
       this.id = post ? post._id : null;
     },
     closeDialog() {
+      this.setCurrentPost(null);
       this.$store.dispatch('toggleEditDialog');
     },
     async editPost() {
@@ -90,7 +97,7 @@ export default {
       this.error = null;
 
       try {
-        await this.$store.dispatch('updatePost', {
+        await this.$store.dispatch('editPost', {
           title: this.newTitle,
           content: this.newContent,
           isEdit: this.isEdit,
@@ -109,9 +116,9 @@ export default {
       this.setCurrentPost(newPost);
     },
     editDialog(state) {
-      if (state)
-        this.error = null;
-    }
+      if (state) this.error = null;
+      this.setCurrentPost(this.post);
+    },
   },
 };
 </script>

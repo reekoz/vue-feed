@@ -170,7 +170,7 @@ export default {
         {
           method: 'PUT',
           headers: {
-            Authentication: 'Bearer ' + context.getters.token,
+            Authorization: 'Bearer ' + context.getters.token,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
@@ -198,7 +198,7 @@ export default {
           context.getters.userId,
         {
           headers: {
-            Authentication: 'Bearer ' + context.getters.token,
+            Authorization: 'Bearer ' + context.getters.token,
           },
         }
       );
@@ -219,7 +219,7 @@ export default {
         {
           method: 'PUT',
           headers: {
-            Authentication: 'Bearer ' + context.getters.token,
+            Authorization: 'Bearer ' + context.getters.token,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({

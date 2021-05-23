@@ -5,7 +5,7 @@ export default {
       editDialog: false,
       isEdit: false,
       editPost: null,
-      totalPosts: 0
+      totalPosts: 0,
     };
   },
   getters: {
@@ -24,14 +24,23 @@ export default {
     totalPosts(state) {
       return state.totalPosts;
     },
-    },
+  },
   actions: {
     async loadPosts(context, payload) {
+      let page = 1;
+      let perPage = 6;
+
+      if (payload) {
+        page = payload.page;
+        perPage = payload.perPage;
+      }
+
       const res = await fetch(
-        process.env.VUE_APP_API_ENDPOINT + `/feed/posts?page=${payload.page}&perPage=${payload.perPage}`,
+        process.env.VUE_APP_API_ENDPOINT +
+          `/feed/posts?page=${page}&perPage=${perPage}`,
         {
           headers: {
-            Authentication: 'Bearer ' + context.getters.token,
+            Authorization: 'Bearer ' + context.getters.token,
           },
         }
       );
@@ -44,10 +53,10 @@ export default {
 
       context.commit('setPosts', {
         posts: resData.posts,
-        totalPosts: resData.totalItems
+        totalPosts: resData.totalItems,
       });
     },
-    async updatePost(context, payload) {
+    async editPost(context, payload) {
       let url = process.env.VUE_APP_API_ENDPOINT + '/feed/post';
       let method = 'POST';
 
@@ -59,7 +68,7 @@ export default {
       const res = await fetch(url, {
         method: method,
         headers: {
-          Authentication: 'Bearer ' + context.getters.token,
+          Authorization: 'Bearer ' + context.getters.token,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -73,18 +82,28 @@ export default {
       if (!res.ok) {
         throw new Error(resData.message || 'Creating or editing a post failed');
       }
+    },
+    addPost(context, payload) {
+      const newPost = context.getters.posts.find(
+        p => p._id === payload.post._id
+      );
 
+      if (!newPost) {
+        const posts = [payload.post, ...context.getters.posts];
+
+        context.commit('setPosts', {
+          posts: posts,
+          totalPosts: payload.totalItems,
+        });
+      }
+    },
+    updatePost(context, payload) {
       const posts = [...context.getters.posts];
-
-      if (payload.isEdit) {
-        const index = posts.findIndex(p => p._id === resData.post._id);
-
-        if (index > -1) posts[index] = resData.post;
-      } else posts.unshift(resData.post);
-
+      const index = posts.findIndex(p => p._id === payload.post._id);
+      if (index > -1) posts[index] = payload.post;
       context.commit('setPosts', {
         posts: posts,
-        totalPosts: resData.totalItems
+        totalPosts: payload.totalItems,
       });
     },
     openEditPost(context, payload) {
@@ -101,7 +120,7 @@ export default {
         {
           method: 'DELETE',
           headers: {
-            Authentication: 'Bearer ' + context.getters.token,
+            Authorization: 'Bearer ' + context.getters.token,
           },
         }
       );

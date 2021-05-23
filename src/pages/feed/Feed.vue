@@ -53,6 +53,7 @@
 <script>
 import FeedPost from '../../components/feed/FeedPost.vue';
 import EditPost from '../../components/feed/EditPost.vue';
+import openSocket from 'socket.io-client';
 
 export default {
   components: { EditPost, FeedPost },
@@ -70,6 +71,34 @@ export default {
   created() {
     this.loadPosts();
     this.getStatus();
+    const socket = openSocket(process.env.VUE_APP_API_ENDPOINT);
+    socket.on('posts', async data => {
+      switch (data.action) {
+        case 'create':
+          this.$store.dispatch('addPost', {
+            post: data.post,
+            totalItems: data.totalItems,
+          });
+          break;
+        case 'update':
+          this.$store.dispatch('updatePost', {
+            post: data.post,
+            totalItems: data.totalItems,
+          });
+          break;
+        case 'delete':
+          try {
+            await this.$store.dispatch('loadPosts');
+          } catch (err) {
+            this.$store.dispatch('toggleAlert', {
+              show: true,
+              message: err.message || err,
+              type: 'error',
+            });
+          }
+          break;
+      }
+    });
   },
   methods: {
     async loadPosts() {
