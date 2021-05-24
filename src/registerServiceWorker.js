@@ -24,7 +24,7 @@ if (process.env.NODE_ENV === 'production') {
       store.dispatch('toggleAlert', {
         show: true,
         message:
-          'New content is available; please refresh the page or close and re-open the app.',
+          'New content is available, please close and re-open the app.',
         type: 'info',
       });
     },
