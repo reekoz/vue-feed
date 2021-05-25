@@ -8,7 +8,7 @@
         max-width="400"
         :loading="loading"
       >
-        <v-card-title>Login EDIT</v-card-title>
+        <v-card-title>Login</v-card-title>
         <v-card-text>
           <v-container>
             <v-row>

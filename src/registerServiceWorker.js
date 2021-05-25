@@ -24,7 +24,7 @@ if (process.env.NODE_ENV === 'production') {
       store.dispatch('toggleAlert', {
         show: true,
         message:
-          'New content is available, please relaod or close and re-open the app.',
+          'New content is available, please relaod the page to install new version.',
         type: 'info',
       });
       unregister();
