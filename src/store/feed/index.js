@@ -1,4 +1,5 @@
 export default {
+  namespaced: true,
   state() {
     return {
       posts: [],
@@ -40,7 +41,7 @@ export default {
           `/feed/posts?page=${page}&perPage=${perPage}`,
         {
           headers: {
-            Authorization: 'Bearer ' + context.getters.token,
+            Authorization: 'Bearer ' + context.rootGetters['auth/token'],
           },
         }
       );
@@ -68,7 +69,7 @@ export default {
       const res = await fetch(url, {
         method: method,
         headers: {
-          Authorization: 'Bearer ' + context.getters.token,
+          Authorization: 'Bearer ' + context.rootGetters['auth/token'],
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -120,7 +121,7 @@ export default {
         {
           method: 'DELETE',
           headers: {
-            Authorization: 'Bearer ' + context.getters.token,
+            Authorization: 'Bearer ' + context.rootGetters['auth/token'],
           },
         }
       );

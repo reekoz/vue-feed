@@ -88,7 +88,7 @@ export default {
       this.error = null;
 
       try {
-        await this.$store.dispatch('signup', {
+        await this.$store.dispatch('auth/signup', {
           email: this.email,
           password: this.password,
           name: this.name,

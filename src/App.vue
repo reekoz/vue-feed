@@ -95,17 +95,17 @@ export default {
   created() {
     this.setThemeMode(this.themeMode);
     this.setThemeColor(this.color, this.shade);
-    this.$store.dispatch('tryLogin');
+    this.$store.dispatch('auth/tryLogin');
   },
   computed: {
     isLoggedIn() {
-      return this.$store.getters.isAuth;
+      return this.$store.getters['auth/isAuth'];
     },
     userName() {
-      return this.$store.getters.name;
+      return this.$store.getters['auth/name'];
     },
     editDialog() {
-      return this.$store.getters.editDialog;
+      return this.$store.getters['feed/editDialog'];
     },
     alert() {
       return this.$store.getters.alert;
@@ -117,13 +117,13 @@ export default {
       return this.$store.getters.alertType;
     },
     themeMode() {
-      return this.$store.getters.themeMode;
+      return this.$store.getters['auth/themeMode'];
     },
     color() {
-      return this.$store.getters.color;
+      return this.$store.getters['auth/color'];
     },
     shade() {
-      return this.$store.getters.shade;
+      return this.$store.getters['auth/shade'];
     },
   },
   watch: {
@@ -149,7 +149,7 @@ export default {
   },
   methods: {
     logout() {
-      this.$store.dispatch('logout');
+      this.$store.dispatch('auth/logout');
     },
     closeErorrAlert() {
       this.$store.dispatch('toggleAlert', {

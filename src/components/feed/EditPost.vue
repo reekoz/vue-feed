@@ -70,13 +70,13 @@ export default {
   },
   computed: {
     isEdit() {
-      return this.$store.getters.isEdit;
+      return this.$store.getters['feed/isEdit'];
     },
     post() {
-      return this.$store.getters.editPost;
+      return this.$store.getters['feed/editPost'];
     },
     editDialog() {
-      return this.$store.getters.editPost;
+      return this.$store.getters['feed/editDialog'];
     },
   },
   created() {
@@ -90,14 +90,14 @@ export default {
     },
     closeDialog() {
       this.setCurrentPost(null);
-      this.$store.dispatch('toggleEditDialog');
+      this.$store.dispatch('feed/toggleEditDialog');
     },
     async editPost() {
       this.loading = true;
       this.error = null;
 
       try {
-        await this.$store.dispatch('editPost', {
+        await this.$store.dispatch('feed/editPost', {
           title: this.newTitle,
           content: this.newContent,
           isEdit: this.isEdit,

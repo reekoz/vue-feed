@@ -96,7 +96,7 @@ export default {
     };
   },
   created() {
-    this.newName = this.$store.getters.name;
+    this.newName = this.$store.getters['auth/name'];
     for (var color in colors) {
       if (color !== 'shades') this.allColors.push(color);
     }
@@ -112,7 +112,7 @@ export default {
       this.error = null;
 
       try {
-        await this.$store.dispatch('updateSettings', {
+        await this.$store.dispatch('auth/updateSettings', {
           name: this.newName,
           themeMode: this.$vuetify.theme.dark ? 'dark' : 'light',
           color: this.userColor,
@@ -148,10 +148,10 @@ export default {
       return colors;
     },
     color() {
-      return this.$store.getters.color;
+      return this.$store.getters['auth/color'];
     },
     shade() {
-      return this.$store.getters.shade;
+      return this.$store.getters['auth/shade'];
     },
   },
   watch: {

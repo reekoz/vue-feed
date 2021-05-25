@@ -75,20 +75,20 @@ export default {
     socket.on('posts', async data => {
       switch (data.action) {
         case 'create':
-          this.$store.dispatch('addPost', {
+          this.$store.dispatch('feed/addPost', {
             post: data.post,
             totalItems: data.totalItems,
           });
           break;
         case 'update':
-          this.$store.dispatch('updatePost', {
+          this.$store.dispatch('feed/updatePost', {
             post: data.post,
             totalItems: data.totalItems,
           });
           break;
         case 'delete':
           try {
-            await this.$store.dispatch('loadPosts');
+            await this.$store.dispatch('feed/loadPosts');
           } catch (err) {
             this.$store.dispatch('toggleAlert', {
               show: true,
@@ -106,7 +106,7 @@ export default {
       this.error = null;
 
       try {
-        await this.$store.dispatch('loadPosts', {
+        await this.$store.dispatch('feed/loadPosts', {
           page: this.page,
           perPage: this.postsPerPage,
         });
@@ -117,7 +117,7 @@ export default {
       this.loading = false;
     },
     addPost() {
-      this.$store.dispatch('openEditPost', { isEdit: false, post: null });
+      this.$store.dispatch('feed/openEditPost', { isEdit: false, post: null });
     },
     nextPage() {
       this.page++;
@@ -129,8 +129,8 @@ export default {
     },
     async getStatus() {
       try {
-        await this.$store.dispatch('getStatus');
-        this.status = this.$store.getters.status;
+        await this.$store.dispatch('auth/getStatus');
+        this.status = this.$store.getters['auth/status'];
       } catch (err) {
         this.$store.dispatch('toggleAlert', {
           show: true,
@@ -141,7 +141,7 @@ export default {
     },
     async updateStatus() {
       try {
-        await this.$store.dispatch('updateStatus', { status: this.status });
+        await this.$store.dispatch('auth/updateStatus', { status: this.status });
         this.$store.dispatch('toggleAlert', {
           show: true,
           message: 'Status updated!',
@@ -158,16 +158,16 @@ export default {
   },
   computed: {
     posts() {
-      return this.$store.getters.posts;
+      return this.$store.getters['feed/posts'];
     },
     editDialog() {
-      return this.$store.getters.editDialog;
+      return this.$store.getters['feed/editDialog'];
     },
     editPost() {
-      return this.$store.getters.editPost;
+      return this.$store.getters['feed/editPost'];
     },
     pageLenght() {
-      const total = this.$store.getters.totalPosts;
+      const total = this.$store.getters['feed/totalPosts'];
       return Math.ceil(total / this.postsPerPage);
     },
   },

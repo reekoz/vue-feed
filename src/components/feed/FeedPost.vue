@@ -60,8 +60,8 @@ export default {
   methods: {
     async deletePost() {
       try {
-        await this.$store.dispatch('deletePost', { _id: this.post._id });
-        await this.$store.dispatch('loadPosts');
+        await this.$store.dispatch('feed/deletePost', { _id: this.post._id });
+        await this.$store.dispatch('feed/loadPosts');
         this.dialogDelete = false;
       } catch (err) {
         this.dialogDelete = false;
@@ -74,7 +74,7 @@ export default {
       }
     },
     editPost() {
-      this.$store.dispatch('openEditPost', { isEdit: true, post: this.post });
+      this.$store.dispatch('feed/openEditPost', { isEdit: true, post: this.post });
     },
   },
 };

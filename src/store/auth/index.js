@@ -1,6 +1,7 @@
 let timer;
 
 export default {
+  namespaced: true,
   state: {
     isAuth: false,
     token: null,
