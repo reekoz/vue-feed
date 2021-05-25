@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import { register } from 'register-service-worker';
+import { register, unregister } from 'register-service-worker';
 import store from './store/index';
 
 if (process.env.NODE_ENV === 'production') {
@@ -24,9 +24,10 @@ if (process.env.NODE_ENV === 'production') {
       store.dispatch('toggleAlert', {
         show: true,
         message:
-          'New content is available, please close and re-open the app.',
+          'New content is available, please relaod or close and re-open the app.',
         type: 'info',
       });
+      unregister();
     },
     offline() {
       console.log(
