@@ -10,7 +10,7 @@
   <li>Vuex to manage state (<a href="https://vuex.vuejs.org/">Vuex</a>)</li> 
   <li>PWA with Service Worker with auto update (<a href="https://ionicframework.com/docs/vue/pwa">Guide</a>)</li>
   <li>Authentication with JWT, with auto logout after token expiration (<a href="https://jwt.io/">JWT</a>)</li>
-  <li>Real-time CRUD of posts with Socket.IO (<a href="https://socket.io/">Socket.IO</a>)</li>
+  <li>Real-time CRUD of posts with <a href="https://socket.io/">Socket.IO</a></li>
 </ul>
 
 ## Project setup
